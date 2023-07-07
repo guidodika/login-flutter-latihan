@@ -46,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
                 padding: const EdgeInsets.fromLTRB(20, 60, 20, 0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: const [
                     Text(
                       'K-24',
                       style: TextStyle(
@@ -68,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             // Login Form
             AnimatedPositioned(
-              duration: Duration(milliseconds: 500),
+              duration: const Duration(milliseconds: 500),
               curve: Curves.easeInOut,
               left: 0,
               right: 0,
@@ -83,8 +83,8 @@ class _LoginPageState extends State<LoginPage> {
                   }
                 },
                 child: Container(
-                  padding: EdgeInsets.all(30),
-                  decoration: BoxDecoration(
+                  padding: const EdgeInsets.all(30),
+                  decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(30),
@@ -94,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Text(
+                      const Text(
                         'Selamat Datang',
                         style: TextStyle(
                           fontSize: 24,
@@ -102,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Text(
+                      const Text(
                         'Silahkan masuk dengan akun yang sudah diberikan',
                         style: TextStyle(
                           fontSize: 12,
@@ -110,7 +110,7 @@ class _LoginPageState extends State<LoginPage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       TextFormField(
                         decoration: InputDecoration(
                           labelText: 'Username',
@@ -119,7 +119,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       TextFormField(
                         decoration: InputDecoration(
                           labelText: 'PIN',
@@ -129,14 +129,14 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         obscureText: true,
                       ),
-                      Text(
+                      const Text(
                         'PIN awal anda adalah 1111',
                         style: TextStyle(
                           fontSize: 12,
                           color: Colors.blue,
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       RaisedButton(
                         onPressed: () {
 
@@ -150,9 +150,9 @@ class _LoginPageState extends State<LoginPage> {
                               fontSize: 16.0
                           );
                         },
-                        child: Text('Login'),
                         color: Colors.blue,
                         textColor: Colors.white,
+                        child: const Text('Login'),
                       ),
                     ],
                   ),

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:untitled/dashboard_page.dart';
 import 'package:untitled/login_page.dart';
+import 'package:untitled/view/home_page.dart';
 import 'package:untitled/view_model/login/login_bloc.dart';
 
 void main() {
@@ -35,7 +37,7 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.blue,
           ),
           builder: EasyLoading.init(),
-          home: const LoginPage(),
+          home: LoginPage(),
         ),
     );
   }

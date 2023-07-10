@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:untitled/dashboard_page.dart';
-import 'package:untitled/utils/show_dialog_loading_helper.dart';
 import 'package:untitled/utils/will_pop_scope_helper.dart';
 import '../../../view_model/login/login_bloc.dart';
 import '../../../utils/text_form_field_helper.dart';
@@ -56,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
               // Background Image
               Positioned.fill(
                 child: Image.asset(
-                  'assets/background-image-k24.jpg',
+                  'assets/images/background-image-k24.jpg',
                   fit: BoxFit.cover,
                 ),
               ),
@@ -174,7 +173,10 @@ class _LoginPageState extends State<LoginPage> {
                               _loginBloc.add(PostLogin(
                                   username: _usernameController.text,
                                   password: _passController.text));
-                              await Navigator.push(context, MaterialPageRoute(builder: (context) => DashboardPage()));
+                              await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => DashboardPage()));
                             }
                           },
                         ),

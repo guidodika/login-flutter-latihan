@@ -2,11 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:untitled/dashboard_page.dart';
+import 'package:untitled/utils/show_dialog_loading_helper.dart';
 import 'package:untitled/utils/will_pop_scope_helper.dart';
 import '../../../view_model/login/login_bloc.dart';
 import '../../../utils/text_form_field_helper.dart';
-
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -16,7 +18,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  static final TextEditingController _usernameController = TextEditingController();
+  static final TextEditingController _usernameController =
+      TextEditingController();
   static final TextEditingController _passController = TextEditingController();
   static LoginBloc _loginBloc = LoginBloc();
   final _formKey = GlobalKey<FormState>();
@@ -171,7 +174,7 @@ class _LoginPageState extends State<LoginPage> {
                               _loginBloc.add(PostLogin(
                                   username: _usernameController.text,
                                   password: _passController.text));
-
+                              await Navigator.push(context, MaterialPageRoute(builder: (context) => DashboardPage()));
                             }
                           },
                         ),

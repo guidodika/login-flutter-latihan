@@ -19,37 +19,38 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             urlHttp: ApiConstants.apiLogin,
             username: event.username,
             password: event.password);
+
         if (respon['status'] == 'success') {
+          print('success 1');
           Future.delayed(const Duration(seconds: 1), () async {
             ShowDialogHelper.dismissLoading();
           });
           Future.delayed(const Duration(seconds: 2), () async {
             ShowDialogHelper.showSuccess("Berhasil Login");
           });
-          User dataLogin = User.fromJson(respon['data']);
+          List<User> dataLogin = List<User>.from(
+            respon['login']!.map((x) => User.fromJson(x)));
           debugPrint("User Mobile ide");
-          await AppSharedPreferences.setUserProfile(dataLogin);
-          await AppSharedPreferences.setUserLoggedIn(true);
-          UserConfig.dataUser = await AppSharedPreferences.getUserProfile();
+          // await AppSharedPreferences.setUserProfile(dataLogin);
+          // await AppSharedPreferences.setUserLoggedIn(true);
+          // UserConfig.dataUser = await AppSharedPreferences.getUserProfile();
 
           emit(DataLogin(
             dataUser: dataLogin,
             status: 'success',
-            message: respon['message'],
           ));
         } else {
           Future.delayed(const Duration(seconds: 1), () async {
             ShowDialogHelper.showError("Gagal Login");
           });
           emit(DataLogin(
-              dataUser: User(), status: 'failed', message: respon['message']));
+              dataUser: state.dataUser, status: 'failed'));
         }
       } catch (error) {
         debugPrint("Error Login BloC: $error");
         emit(DataLogin(
-            dataUser: User(),
-            status: 'error',
-            message: 'Pastikan piranti anda terhubung dengan internet'));
+            dataUser: state.dataUser,
+            status: 'error',));
       }
     });
     on<LogoutApp>((event, emit) async {

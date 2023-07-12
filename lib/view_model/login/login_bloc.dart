@@ -21,19 +21,20 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             password: event.password);
 
         if (respon['status'] == 'success') {
-          print('success 1');
           Future.delayed(const Duration(seconds: 1), () async {
             ShowDialogHelper.dismissLoading();
           });
           Future.delayed(const Duration(seconds: 2), () async {
             ShowDialogHelper.showSuccess("Berhasil Login");
           });
-          List<User> dataLogin = List<User>.from(
-            respon['login']!.map((x) => User.fromJson(x)));
-          debugPrint("User Mobile ide");
-          // await AppSharedPreferences.setUserProfile(dataLogin);
-          // await AppSharedPreferences.setUserLoggedIn(true);
-          // UserConfig.dataUser = await AppSharedPreferences.getUserProfile();
+          List<User> dataLogin =
+              List<User>.from(respon['login']!.map((x) => User.fromJson(x)));
+
+          var userProfile = await AppSharedPreferences.setUserProfile(dataLogin.first);
+          await AppSharedPreferences.setUserLoggedIn(true);
+          UserConfig.dataUser = await AppSharedPreferences.getUserProfile();
+
+          debugPrint("cek user profile: $userProfile");
 
           emit(DataLogin(
             dataUser: dataLogin,
@@ -43,20 +44,20 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           Future.delayed(const Duration(seconds: 1), () async {
             ShowDialogHelper.showError("Gagal Login");
           });
-          emit(DataLogin(
-              dataUser: state.dataUser, status: 'failed'));
+          emit(DataLogin(dataUser: state.dataUser, status: 'failed'));
         }
       } catch (error) {
         debugPrint("Error Login BloC: $error");
         emit(DataLogin(
-            dataUser: state.dataUser,
-            status: 'error',));
+          dataUser: state.dataUser,
+          status: 'error',
+        ));
       }
     });
     on<LogoutApp>((event, emit) async {
       await AppSharedPreferences.setUserProfile(User());
       await AppSharedPreferences.setUserLoggedIn(false);
-      UserConfig.dataUser = User();
+      UserConfig.dataUser =User();
       // TODO: implement event handler
     });
     on<ClearLogin>((event, emit) async {

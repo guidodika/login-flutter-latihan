@@ -6,10 +6,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:untitled/dashboard_page.dart';
+import 'package:untitled/view/dashboard_page.dart';
 import 'package:untitled/utils/will_pop_scope_helper.dart';
-import '../../../view_model/login/login_bloc.dart';
-import '../../../utils/text_form_field_helper.dart';
+import '../../../../view_model/login/login_bloc.dart';
+import '../../../../utils/text_form_field_helper.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);

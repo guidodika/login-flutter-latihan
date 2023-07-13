@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:untitled/view/tambahPasien_page.dart';
 
 import 'card_item.dart';
 
@@ -90,7 +91,12 @@ class _HistoryPageState extends State<HistoryPage> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 ElevatedButton.icon(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => TambahPasienPage()));
+                  },
                   icon: Icon(Icons.add),
                   label: Text('Tambah Pasien'),
                 ),
@@ -102,5 +108,3 @@ class _HistoryPageState extends State<HistoryPage> {
     );
   }
 }
-
-

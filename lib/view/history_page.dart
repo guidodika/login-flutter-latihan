@@ -70,6 +70,7 @@ class _HistoryPageState extends State<HistoryPage> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
+                  prefixIcon: Icon(Icons.search),
                 ),
               ),
             ),

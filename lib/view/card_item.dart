@@ -40,10 +40,10 @@ class _CardItemState extends State<CardItem> {
         title: Row(
           children: [
             Expanded(
-              child: Text(widget.name),
+              child: Text(widget.name, style: TextStyle(fontWeight: FontWeight.bold),),
             ),
             IconButton(
-              icon: Icon(Icons.delete),
+              icon: Icon(Icons.delete, color: Colors.red),
               onPressed: () {
                 // Aksi ketika tombol delete ditekan
               },

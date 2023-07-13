@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:untitled/view/home_page.dart';
-import 'package:untitled/view/orders_page.dart';
+import 'package:untitled/view/history_page.dart';
 import 'package:untitled/view/profile_page.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -14,7 +14,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   final List<Widget> _pages = [
     HomePage(),
-    OrdersPage(),
+    HistoryPage(),
     ProfilePage(),
   ];
 
@@ -42,8 +42,8 @@ class _DashboardPageState extends State<DashboardPage> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            label: 'Orders',
+            icon: Icon(Icons.notes),
+            label: 'Riwayat',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),

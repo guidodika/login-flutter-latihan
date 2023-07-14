@@ -13,16 +13,23 @@ class HistoryPage extends StatefulWidget {
 class _HistoryPageState extends State<HistoryPage> {
   String searchQuery = '';
   List<CardItem> cardItems = [
-    CardItem(name: 'Guido', keluhan: "Batuk", birthdate: '14-09-1999'),
-    CardItem(name: 'Tara', keluhan: "Flu", birthdate: '01-01-1982'),
-    CardItem(name: 'Radit', keluhan: "Asma", birthdate: '24-05-1992'),
-    CardItem(name: 'Bima', keluhan: "Diare", birthdate: '27-09-1999'),
+    CardItem(name: 'Guido', keluhan: "Batuk", birthdate: '14-09-1999', onDelete: () {}),
+    CardItem(name: 'Tara', keluhan: "Flu", birthdate: '01-01-1982', onDelete: () {}),
+    CardItem(name: 'Radit', keluhan: "Asma", birthdate: '24-05-1992', onDelete: () {}),
+    CardItem(name: 'Bima', keluhan: "Diare", birthdate: '27-09-1999', onDelete: () {}),
     CardItem(
-        name: 'Agnes', keluhan: "Radang Tenggorokan", birthdate: '04-12-1961'),
-    CardItem(name: 'Monica', keluhan: "Diabetes", birthdate: '26-07-1999'),
+        name: 'Agnes', keluhan: "Radang Tenggorokan", birthdate: '04-12-1961', onDelete: () {}),
+    CardItem(name: 'Monica', keluhan: "Diabetes", birthdate: '26-07-1999', onDelete: () {}),
   ];
 
+
   List<CardItem> filteredCardItems = [];
+
+  void deleteCard(int index) {
+    setState(() {
+      filteredCardItems.removeAt(index);
+    });
+  }
 
   @override
   void initState() {
@@ -81,7 +88,12 @@ class _HistoryPageState extends State<HistoryPage> {
                 child: ListView.builder(
                   itemCount: filteredCardItems.length,
                   itemBuilder: (context, index) {
-                    return filteredCardItems[index];
+                    return CardItem(
+                      name: filteredCardItems[index].name,
+                      keluhan: filteredCardItems[index].keluhan,
+                      birthdate: filteredCardItems[index].birthdate,
+                      onDelete: () => deleteCard(index),
+                    );
                   },
                 ),
               ),

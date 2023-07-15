@@ -15,10 +15,11 @@ class _HistoryPageState extends State<HistoryPage> {
   String searchQuery = '';
   List<CardItem> cardItems = [];
   List<CardItem> filteredCardItems = [];
+  final FocusNode _searchFocusNode = FocusNode(); // FocusNode untuk TextField pencarian
 
   @override
   void initState() {
-    filteredCardItems = cardItems; // Menginisialisasi filteredCardItems dengan cardItems
+    filteredCardItems = cardItems;
     super.initState();
   }
 
@@ -27,100 +28,111 @@ class _HistoryPageState extends State<HistoryPage> {
     if (query.isNotEmpty) {
       filteredList = cardItems
           .where((cardItem) =>
-          cardItem.name.toLowerCase().contains(query.toLowerCase())) // Mencari cardItems yang memiliki nama yang mengandung query
+          cardItem.name.toLowerCase().contains(query.toLowerCase()))
           .toList();
     } else {
       filteredList = cardItems;
     }
     setState(() {
-      searchQuery = query; // Mengupdate searchQuery dengan query
-      filteredCardItems = filteredList; // Mengupdate filteredCardItems dengan filteredList
+      searchQuery = query;
+      filteredCardItems = filteredList;
     });
   }
 
   void addCardItem(String name, String keluhan, String birthdate) {
     setState(() {
-      cardItems.add(CardItem(name: name, keluhan: keluhan, birthdate: birthdate, onDelete: () {})); // Menambahkan CardItem baru ke dalam cardItems
-      filteredCardItems = cardItems; // Mengupdate filteredCardItems dengan cardItems
+      cardItems.add(CardItem(
+          name: name,
+          keluhan: keluhan,
+          birthdate: birthdate,
+          onDelete: () {}));
+      filteredCardItems = cardItems;
     });
   }
 
   void deleteCardItem(int index) {
     setState(() {
-      cardItems.removeAt(index); // Menghapus CardItem dari cardItems berdasarkan indeks
-      filteredCardItems = cardItems; // Mengupdate filteredCardItems dengan cardItems
+      cardItems.removeAt(index);
+      filteredCardItems = cardItems;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Daftar Pasien'),
-      ),
-      body: Container(
-        padding: const EdgeInsets.all(15.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 12.0),
-            Text(
-              'Daftar Pasien', // Judul halaman
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24.0),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                onChanged: (value) => search(value), // Memanggil fungsi search saat nilai TextField berubah
-                decoration: InputDecoration(
-                  hintText: 'Cari Pasien', // Hint teks untuk TextField
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+    // Menggunakan GestureDetector untuk menutup keyboard saat mengeklik tempat lain di luar TextField
+    return GestureDetector(
+      onTap: () {
+        _searchFocusNode.unfocus();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Daftar Pasien'),
+        ),
+        body: Container(
+          padding: const EdgeInsets.all(15.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 12.0),
+              Text(
+                'Daftar Pasien',
+                style:
+                TextStyle(fontWeight: FontWeight.bold, fontSize: 24.0),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  focusNode: _searchFocusNode, // Assign focusNode ke TextField pencarian
+                  onChanged: (value) => search(value),
+                  decoration: InputDecoration(
+                    hintText: 'Cari Pasien',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    prefixIcon: Icon(Icons.search),
                   ),
-                  prefixIcon: Icon(Icons.search), // Ikon search di sebelah kiri TextField
                 ),
               ),
-            ),
-            Expanded(
-              child: Scrollbar(
-                thumbVisibility: true,
-                child: ListView.builder(
-                  itemCount: filteredCardItems.length, // Jumlah item dalam ListView
-                  itemBuilder: (context, index) {
-                    return CardItem(
-                      name: filteredCardItems[index].name,
-                      keluhan: filteredCardItems[index].keluhan,
-                      birthdate: filteredCardItems[index].birthdate,
-                      // Menghapus CardItem sesuai dengan indeks saat onDelete dipanggil
-                      onDelete: () => deleteCardItem(index),
-                    );
-                  },
+              Expanded(
+                child: Scrollbar(
+                  thumbVisibility: true,
+                  child: ListView.builder(
+                    itemCount: filteredCardItems.length,
+                    itemBuilder: (context, index) {
+                      return CardItem(
+                        name: filteredCardItems[index].name,
+                        keluhan: filteredCardItems[index].keluhan,
+                        birthdate: filteredCardItems[index].birthdate,
+                        onDelete: () => deleteCardItem(index),
+                      );
+                    },
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 16.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                ElevatedButton.icon(
-                  onPressed: () async {
-                    final result = await Navigator.push(
-                      context,
-                      // Menavigasi ke halaman TambahPasienPage dan menunggu hasilnya
-                      MaterialPageRoute(
-                        builder: (context) => TambahPasienPage(onSave: addCardItem),
-                      ),
-                    );
-                    if (result != null) {
-                      // Handle result if needed
-                    }
-                  },
-                  icon: Icon(Icons.add),
-                  label: Text('Tambah Pasien'),
-                ),
-              ],
-            ),
-          ],
+              SizedBox(height: 16.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ElevatedButton.icon(
+                    onPressed: () async {
+                      final result = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              TambahPasienPage(onSave: addCardItem),
+                        ),
+                      );
+                      if (result != null) {
+                        // Handle result if needed
+                      }
+                    },
+                    icon: Icon(Icons.add),
+                    label: Text('Tambah Pasien'),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

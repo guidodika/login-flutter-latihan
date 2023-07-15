@@ -19,6 +19,15 @@ class _TambahPasienState extends State<TambahPasienPage> {
   final TextEditingController _keluhanController = TextEditingController();
   final TextEditingController _tanggalLahirController = TextEditingController();
   DateTime _selectedDate = DateTime.now();
+  final FocusNode _namaFocusNode = FocusNode(); // FocusNode untuk TextField nama
+  final FocusNode _keluhanFocusNode = FocusNode(); // FocusNode untuk TextField keluhan
+
+  @override
+  void dispose() {
+    _namaFocusNode.dispose(); // Hapus FocusNode saat widget dihapus
+    _keluhanFocusNode.dispose();
+    super.dispose();
+  }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -38,131 +47,138 @@ class _TambahPasienState extends State<TambahPasienPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Form Pasien'),
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: ListView(
-              padding: EdgeInsets.all(16.0),
-              children: [
-                Text(
-                  'Nama Lengkap',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 8.0),
-                TextFormField(
-                  controller: _namaController,
-                  decoration: InputDecoration(
-                    hintText: 'Masukkan Nama Lengkap',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+    return GestureDetector(
+      onTap: () {
+        // Menutup keyboard saat pengguna mengeklik tempat lain di luar TextField
+        _namaFocusNode.unfocus();
+        _keluhanFocusNode.unfocus();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Form Pasien'),
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.all(16.0),
+                children: [
+                  Text(
+                    'Nama Lengkap',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
-                SizedBox(height: 16.0),
-                Text(
-                  'Keluhan',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 8.0),
-                TextFormField(
-                  controller: _keluhanController,
-                  decoration: InputDecoration(
-                    hintText: 'Masukkan Keluhan',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 16.0),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Tanggal Lahir',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                  SizedBox(height: 8.0),
+                  TextFormField(
+                    focusNode: _namaFocusNode, // Assign focusNode ke TextField nama
+                    controller: _namaController,
+                    decoration: InputDecoration(
+                      hintText: 'Masukkan Nama Lengkap',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
                       ),
                     ),
-                    SizedBox(height: 8.0),
-                    Row(
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            _selectDate(
-                                context); // Panggil fungsi untuk menampilkan kalendar
-                          },
-                          icon: Icon(Icons.calendar_month),
+                  ),
+                  SizedBox(height: 16.0),
+                  Text(
+                    'Keluhan',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 8.0),
+                  TextFormField(
+                    focusNode: _keluhanFocusNode, // Assign focusNode ke TextField keluhan
+                    controller: _keluhanController,
+                    decoration: InputDecoration(
+                      hintText: 'Masukkan Keluhan',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 16.0),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Tanggal Lahir',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
                         ),
-                        Expanded(
-                          child: TextFormField(
-                            enabled: false,
-                            controller: _tanggalLahirController,
-                            decoration: const InputDecoration(
-                              disabledBorder: OutlineInputBorder(
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(4)),
-                                borderSide:
-                                BorderSide(width: 1, color: Colors.black),
+                      ),
+                      SizedBox(height: 8.0),
+                      Row(
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              _selectDate(context);
+                            },
+                            icon: Icon(Icons.calendar_month),
+                          ),
+                          Expanded(
+                            child: TextFormField(
+                              enabled: false,
+                              controller: _tanggalLahirController,
+                              decoration: const InputDecoration(
+                                disabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                  BorderRadius.all(Radius.circular(4)),
+                                  borderSide:
+                                  BorderSide(width: 1, color: Colors.black),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 16.0),
-          Padding(
-            padding: EdgeInsets.all(16.0),
-            child: ElevatedButton(
-              onPressed: () {
-                String namaLengkap = _namaController.text;
-                String keluhan = _keluhanController.text;
-                String tanggalLahir = _tanggalLahirController.text;
-
-                if (namaLengkap.isEmpty || keluhan.isEmpty || tanggalLahir.isEmpty) {
-                  // Mengecek apakah ada field yang tidak diisi
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text('Error'),
-                        content: Text('Harap isi semua field'),
-                        actions: [
-                          TextButton(
-                            child: Text('OK'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
                         ],
-                      );
-                    },
-                  );
-                } else {
-                  if (widget.onSave != null) {
-                    widget.onSave!(namaLengkap, keluhan, tanggalLahir);
-                  }
-
-                  Navigator.pop(context);
-                }
-              },
-              child: Text('Simpan'),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+            SizedBox(height: 16.0),
+            Padding(
+              padding: EdgeInsets.all(16.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  String namaLengkap = _namaController.text;
+                  String keluhan = _keluhanController.text;
+                  String tanggalLahir = _tanggalLahirController.text;
+
+                  if (namaLengkap.isEmpty || keluhan.isEmpty || tanggalLahir.isEmpty) {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('Error'),
+                          content: Text('Harap isi semua field'),
+                          actions: [
+                            TextButton(
+                              child: Text('OK'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  } else {
+                    if (widget.onSave != null) {
+                      widget.onSave!(namaLengkap, keluhan, tanggalLahir);
+                    }
+
+                    Navigator.pop(context);
+                  }
+                },
+                child: Text('Simpan'),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -66,6 +66,7 @@ class _HistoryPageState extends State<HistoryPage> {
       child: Scaffold(
         appBar: AppBar(
           title: Text('Daftar Pasien'),
+          automaticallyImplyLeading: false, // Menghilangkan tombol back di AppBar
         ),
         body: Container(
           padding: const EdgeInsets.all(15.0),

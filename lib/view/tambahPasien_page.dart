@@ -2,7 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+typedef OnSaveCallback = void Function(
+    String name, String keluhan, String birthdate);
+
 class TambahPasienPage extends StatefulWidget {
+  final OnSaveCallback? onSave;
+
+  const TambahPasienPage({Key? key, this.onSave}) : super(key: key);
+
   @override
   _TambahPasienState createState() => _TambahPasienState();
 }
@@ -12,14 +19,6 @@ class _TambahPasienState extends State<TambahPasienPage> {
   final TextEditingController _keluhanController = TextEditingController();
   final TextEditingController _tanggalLahirController = TextEditingController();
   DateTime _selectedDate = DateTime.now();
-
-  @override
-  void dispose() {
-    _namaController.dispose();
-    _keluhanController.dispose();
-    _tanggalLahirController.dispose();
-    super.dispose();
-  }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -109,8 +108,10 @@ class _TambahPasienState extends State<TambahPasienPage> {
                             controller: _tanggalLahirController,
                             decoration: const InputDecoration(
                               disabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(4)),
-                                borderSide: BorderSide(width: 1,color: Colors.black),
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(4)),
+                                borderSide:
+                                BorderSide(width: 1, color: Colors.black),
                               ),
                             ),
                           ),
@@ -127,20 +128,36 @@ class _TambahPasienState extends State<TambahPasienPage> {
             padding: EdgeInsets.all(16.0),
             child: ElevatedButton(
               onPressed: () {
-                // Aksi ketika tombol Simpan ditekan
                 String namaLengkap = _namaController.text;
                 String keluhan = _keluhanController.text;
                 String tanggalLahir = _tanggalLahirController.text;
 
-                // Lakukan sesuatu dengan data yang diinput
-                print('Nama Lengkap: $namaLengkap');
-                print('Keluhan: $keluhan');
-                print('Tanggal Lahir: $tanggalLahir');
+                if (namaLengkap.isEmpty || keluhan.isEmpty || tanggalLahir.isEmpty) {
+                  // Mengecek apakah ada field yang tidak diisi
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('Error'),
+                        content: Text('Harap isi semua field'),
+                        actions: [
+                          TextButton(
+                            child: Text('OK'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                } else {
+                  if (widget.onSave != null) {
+                    widget.onSave!(namaLengkap, keluhan, tanggalLahir);
+                  }
 
-                // Reset form
-                _namaController.clear();
-                _keluhanController.clear();
-                _tanggalLahirController.clear();
+                  Navigator.pop(context);
+                }
               },
               child: Text('Simpan'),
             ),

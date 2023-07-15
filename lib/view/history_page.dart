@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:untitled/view/tambahPasien_page.dart';
 
 import 'card_item.dart';
@@ -12,28 +13,12 @@ class HistoryPage extends StatefulWidget {
 
 class _HistoryPageState extends State<HistoryPage> {
   String searchQuery = '';
-  List<CardItem> cardItems = [
-    CardItem(name: 'Guido', keluhan: "Batuk", birthdate: '14-09-1999', onDelete: () {}),
-    CardItem(name: 'Tara', keluhan: "Flu", birthdate: '01-01-1982', onDelete: () {}),
-    CardItem(name: 'Radit', keluhan: "Asma", birthdate: '24-05-1992', onDelete: () {}),
-    CardItem(name: 'Bima', keluhan: "Diare", birthdate: '27-09-1999', onDelete: () {}),
-    CardItem(
-        name: 'Agnes', keluhan: "Radang Tenggorokan", birthdate: '04-12-1961', onDelete: () {}),
-    CardItem(name: 'Monica', keluhan: "Diabetes", birthdate: '26-07-1999', onDelete: () {}),
-  ];
-
-
+  List<CardItem> cardItems = [];
   List<CardItem> filteredCardItems = [];
-
-  void deleteCard(int index) {
-    setState(() {
-      filteredCardItems.removeAt(index);
-    });
-  }
 
   @override
   void initState() {
-    filteredCardItems = cardItems;
+    filteredCardItems = cardItems; // Menginisialisasi filteredCardItems dengan cardItems
     super.initState();
   }
 
@@ -42,14 +27,28 @@ class _HistoryPageState extends State<HistoryPage> {
     if (query.isNotEmpty) {
       filteredList = cardItems
           .where((cardItem) =>
-              cardItem.name.toLowerCase().contains(query.toLowerCase()))
+          cardItem.name.toLowerCase().contains(query.toLowerCase())) // Mencari cardItems yang memiliki nama yang mengandung query
           .toList();
     } else {
       filteredList = cardItems;
     }
     setState(() {
-      searchQuery = query;
-      filteredCardItems = filteredList;
+      searchQuery = query; // Mengupdate searchQuery dengan query
+      filteredCardItems = filteredList; // Mengupdate filteredCardItems dengan filteredList
+    });
+  }
+
+  void addCardItem(String name, String keluhan, String birthdate) {
+    setState(() {
+      cardItems.add(CardItem(name: name, keluhan: keluhan, birthdate: birthdate, onDelete: () {})); // Menambahkan CardItem baru ke dalam cardItems
+      filteredCardItems = cardItems; // Mengupdate filteredCardItems dengan cardItems
+    });
+  }
+
+  void deleteCardItem(int index) {
+    setState(() {
+      cardItems.removeAt(index); // Menghapus CardItem dari cardItems berdasarkan indeks
+      filteredCardItems = cardItems; // Mengupdate filteredCardItems dengan cardItems
     });
   }
 
@@ -57,9 +56,7 @@ class _HistoryPageState extends State<HistoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Daftar Pasien',
-        ),
+        title: Text('Daftar Pasien'),
       ),
       body: Container(
         padding: const EdgeInsets.all(15.0),
@@ -67,18 +64,20 @@ class _HistoryPageState extends State<HistoryPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 12.0),
-            Text('Daftar Pasien',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24.0)),
+            Text(
+              'Daftar Pasien', // Judul halaman
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24.0),
+            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextField(
-                onChanged: (value) => search(value),
+                onChanged: (value) => search(value), // Memanggil fungsi search saat nilai TextField berubah
                 decoration: InputDecoration(
-                  hintText: 'Cari Pasien',
+                  hintText: 'Cari Pasien', // Hint teks untuk TextField
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
-                  prefixIcon: Icon(Icons.search),
+                  prefixIcon: Icon(Icons.search), // Ikon search di sebelah kiri TextField
                 ),
               ),
             ),
@@ -86,13 +85,14 @@ class _HistoryPageState extends State<HistoryPage> {
               child: Scrollbar(
                 thumbVisibility: true,
                 child: ListView.builder(
-                  itemCount: filteredCardItems.length,
+                  itemCount: filteredCardItems.length, // Jumlah item dalam ListView
                   itemBuilder: (context, index) {
                     return CardItem(
                       name: filteredCardItems[index].name,
                       keluhan: filteredCardItems[index].keluhan,
                       birthdate: filteredCardItems[index].birthdate,
-                      onDelete: () => deleteCard(index),
+                      // Menghapus CardItem sesuai dengan indeks saat onDelete dipanggil
+                      onDelete: () => deleteCardItem(index),
                     );
                   },
                 ),
@@ -103,11 +103,17 @@ class _HistoryPageState extends State<HistoryPage> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 ElevatedButton.icon(
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => TambahPasienPage()));
+                  onPressed: () async {
+                    final result = await Navigator.push(
+                      context,
+                      // Menavigasi ke halaman TambahPasienPage dan menunggu hasilnya
+                      MaterialPageRoute(
+                        builder: (context) => TambahPasienPage(onSave: addCardItem),
+                      ),
+                    );
+                    if (result != null) {
+                      // Handle result if needed
+                    }
                   },
                   icon: Icon(Icons.add),
                   label: Text('Tambah Pasien'),

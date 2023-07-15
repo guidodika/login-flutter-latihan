@@ -1,18 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:untitled/view/history_page.dart';
 
 class CardItem extends StatefulWidget {
   final String name;
   final String keluhan;
   final String birthdate;
-  final Function onDelete;
+  final VoidCallback onDelete;
 
   const CardItem({
     required this.name,
     required this.keluhan,
     required this.birthdate,
-    required this.onDelete,
+    required this.onDelete
   });
+
   @override
   _CardItemState createState() => _CardItemState();
 }
@@ -42,7 +44,10 @@ class _CardItemState extends State<CardItem> {
         title: Row(
           children: [
             Expanded(
-              child: Text(widget.name, style: TextStyle(fontWeight: FontWeight.bold),),
+              child: Text(
+                widget.name,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
             ),
             IconButton(
               icon: Icon(Icons.delete, color: Colors.red),

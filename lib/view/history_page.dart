@@ -15,7 +15,7 @@ class _HistoryPageState extends State<HistoryPage> {
   String searchQuery = '';
   List<CardItem> cardItems = [];
   List<CardItem> filteredCardItems = [];
-  final FocusNode _searchFocusNode = FocusNode(); // FocusNode untuk TextField pencarian
+  final FocusNode _searchFocusNode = FocusNode();
 
   @override
   void initState() {
@@ -59,7 +59,6 @@ class _HistoryPageState extends State<HistoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Menggunakan GestureDetector untuk menutup keyboard saat mengeklik tempat lain di luar TextField
     return GestureDetector(
       onTap: () {
         _searchFocusNode.unfocus();
@@ -76,13 +75,12 @@ class _HistoryPageState extends State<HistoryPage> {
               SizedBox(height: 12.0),
               Text(
                 'Daftar Pasien',
-                style:
-                TextStyle(fontWeight: FontWeight.bold, fontSize: 24.0),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24.0),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextField(
-                  focusNode: _searchFocusNode, // Assign focusNode ke TextField pencarian
+                  focusNode: _searchFocusNode,
                   onChanged: (value) => search(value),
                   decoration: InputDecoration(
                     hintText: 'Cari Pasien',
@@ -94,7 +92,17 @@ class _HistoryPageState extends State<HistoryPage> {
                 ),
               ),
               Expanded(
-                child: Scrollbar(
+                child: filteredCardItems.isEmpty // Tampilkan pesan jika daftar item kosong
+                    ? Center(
+                  child: Text(
+                    'Data Pasien Masih Kosong',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16.0,
+                    ),
+                  ),
+                )
+                    : Scrollbar(
                   thumbVisibility: true,
                   child: ListView.builder(
                     itemCount: filteredCardItems.length,
@@ -110,10 +118,11 @@ class _HistoryPageState extends State<HistoryPage> {
                 ),
               ),
               SizedBox(height: 16.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  ElevatedButton.icon(
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton.icon(
                     onPressed: () async {
                       final result = await Navigator.push(
                         context,
@@ -129,7 +138,7 @@ class _HistoryPageState extends State<HistoryPage> {
                     icon: Icon(Icons.add),
                     label: Text('Tambah Pasien'),
                   ),
-                ],
+                ),
               ),
             ],
           ),

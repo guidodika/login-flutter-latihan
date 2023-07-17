@@ -1,0 +1,24 @@
+{
+  "data": [
+    {
+      "name": "Nama",
+      "column_name": "nama",
+      "mandatory": true
+    },
+    {
+      "name": "No HP",
+      "column_name": "nomor_hp",
+      "mandatory": true
+    },
+    {
+      "name": "Tanggal Lahir",
+      "column_name": "tanggal_lahir",
+      "mandatory": true
+    },
+    {
+      "name": "domisili",
+      "column_name": "domisili",
+      "mandatory": true
+    }
+  ]
+}

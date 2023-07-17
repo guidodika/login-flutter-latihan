@@ -1,0 +1,112 @@
+
+json 1
+{
+            "data": [
+                {
+                    "name": "Nama",
+                    "column_name": "nama",
+                    "mandatory": true
+                },
+                {
+                    "name": "No HP",
+                    "column_name": "nomor_hp",
+                    "mandatory": true
+                },
+                {
+                    "name": "Tanggal Lahir",
+                    "column_name": "tanggal lahir",
+                    "mandatory": true
+                },
+                {
+                    "name": "alamat",
+                    "column_name": "alamat",
+                    "mandatory": true
+                },
+                {
+                    "name": "domisili",
+                    "column_name": "domisili",
+                    "mandatory": true
+                }
+            ]
+        }
+		
+json2		
+{
+            "data": [
+                {
+                    "name": "Nama",
+                    "column_name": "nama",
+                    "mandatory": true
+                },
+                {
+                    "name": "No HP",
+                    "column_name": "nomor_hp",
+                    "mandatory": true
+                },
+                {
+                    "name": "Tanggal Lahir",
+                    "column_name": "tanggal lahir",
+                    "mandatory": true
+                },
+                {
+                    "name": "alamat",
+                    "column_name": "alamat",
+                    "mandatory": true
+                }
+            ]
+        }
+		
+json3
+{
+            "data": [
+                {
+                    "name": "Nama",
+                    "column_name": "nama",
+                    "mandatory": true
+                },
+                {
+                    "name": "No HP",
+                    "column_name": "nomor_hp",
+                    "mandatory": true
+                },
+                {
+                    "name": "Tanggal Lahir",
+                    "column_name": "tanggal_lahir",
+                    "mandatory": true
+                },
+                {
+                    "name": "domisili",
+                    "column_name": "domisili",
+                    "mandatory": true
+                }
+            ]
+        }
+		
+		
+json4
+{
+            "data": [
+                {
+                    "name": "Nama",
+                    "column_name": "nama",
+                    "mandatory": true
+                },
+                {
+                    "name": "domisili",
+                    "column_name": "domisili",
+                    "mandatory": true
+                }
+            ]
+        }
+
+
+
+// output
+ {
+                    "nama": "value",
+                    "nomor_hp": "value",
+                    "tanggal_lahir": "value",
+                    "alamat": "value",
+                    "domisili": "value"
+}
+

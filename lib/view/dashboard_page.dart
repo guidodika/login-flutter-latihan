@@ -4,6 +4,8 @@ import 'package:untitled/view/home_page.dart';
 import 'package:untitled/view/history_page.dart';
 import 'package:untitled/view/profile_page.dart';
 
+import 'jsonPage.dart';
+
 class DashboardPage extends StatefulWidget {
   @override
   _DashboardPageState createState() => _DashboardPageState();
@@ -15,6 +17,7 @@ class _DashboardPageState extends State<DashboardPage> {
   final List<Widget> _pages = [
     HomePage(),
     HistoryPage(),
+    JsonPage(),
     ProfilePage(),
   ];
 
@@ -44,6 +47,10 @@ class _DashboardPageState extends State<DashboardPage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.notes),
             label: 'Riwayat',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.code),
+            label: 'JSON',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),

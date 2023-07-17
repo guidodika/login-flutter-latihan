@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:untitled/view/tambahPasien_page.dart';
+import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:untitled/view/tambahPasien_page.dart';
 import 'card_item.dart';
 
 class HistoryPage extends StatefulWidget {
@@ -19,7 +20,7 @@ class _HistoryPageState extends State<HistoryPage> {
 
   @override
   void initState() {
-    filteredCardItems = cardItems;
+    _loadData();
     super.initState();
   }
 
@@ -41,21 +42,59 @@ class _HistoryPageState extends State<HistoryPage> {
 
   void addCardItem(String name, String keluhan, String birthdate) {
     setState(() {
-      cardItems.add(CardItem(
+      cardItems.add(
+        CardItem(
           name: name,
           keluhan: keluhan,
           birthdate: birthdate,
-          onDelete: () {}));
-      filteredCardItems = cardItems;
+          onDelete: () {},
+        ),
+      );
+      _saveData();
+      updateFilteredCardItems();
     });
   }
 
   void deleteCardItem(int index) {
     setState(() {
       cardItems.removeAt(index);
-      filteredCardItems = cardItems;
+      _saveData();
+      updateFilteredCardItems();
     });
   }
+
+  void updateFilteredCardItems() {
+    setState(() {
+      filteredCardItems = searchQuery.isEmpty
+          ? cardItems
+          : cardItems
+          .where((cardItem) =>
+          cardItem.name.toLowerCase().contains(searchQuery.toLowerCase()))
+          .toList();
+    });
+  }
+
+  Future<void> _saveData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<Map<String, dynamic>> items = cardItems.map((item) => item.toJson()).toList();
+    await prefs.setStringList(
+      'cardItems',
+      items.map((item) => json.encode(item)).toList(),
+    );
+  }
+
+  Future<void> _loadData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? itemStrings = prefs.getStringList('cardItems');
+    if (itemStrings != null) {
+      List items = itemStrings.map((item) => json.decode(item)).toList();
+      setState(() {
+        cardItems = items.map((item) => CardItem.fromJson(item)).toList();
+        updateFilteredCardItems();
+      });
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +105,7 @@ class _HistoryPageState extends State<HistoryPage> {
       child: Scaffold(
         appBar: AppBar(
           title: Text('Daftar Pasien'),
-          automaticallyImplyLeading: false, // Menghilangkan tombol back di AppBar
+          automaticallyImplyLeading: false,
         ),
         body: Container(
           padding: const EdgeInsets.all(15.0),
@@ -93,7 +132,7 @@ class _HistoryPageState extends State<HistoryPage> {
                 ),
               ),
               Expanded(
-                child: filteredCardItems.isEmpty // Tampilkan pesan jika daftar item kosong
+                child: filteredCardItems.isEmpty
                     ? Center(
                   child: Text(
                     'Data Pasien Masih Kosong',

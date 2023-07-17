@@ -8,12 +8,27 @@ class CardItem extends StatefulWidget {
   final String birthdate;
   final VoidCallback onDelete;
 
-  const CardItem({
-    required this.name,
-    required this.keluhan,
-    required this.birthdate,
-    required this.onDelete
-  });
+  const CardItem(
+      {required this.name,
+      required this.keluhan,
+      required this.birthdate,
+      required this.onDelete});
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'keluhan': keluhan,
+      'birthdate': birthdate,
+    };
+  }
+
+  factory CardItem.fromJson(Map<String, dynamic> json) {
+    return CardItem(
+        name: json['name'],
+        keluhan: json['keluhan'],
+        birthdate: json['birthdate'],
+        onDelete: () {});
+  }
 
   @override
   _CardItemState createState() => _CardItemState();
@@ -28,9 +43,9 @@ class _CardItemState extends State<CardItem> {
       margin: EdgeInsets.all(8.0),
       shape: isChecked
           ? RoundedRectangleBorder(
-        side: BorderSide(color: Colors.blue, width: 2.0),
-        borderRadius: BorderRadius.circular(8.0),
-      )
+              side: BorderSide(color: Colors.blue, width: 2.0),
+              borderRadius: BorderRadius.circular(8.0),
+            )
           : null,
       child: ListTile(
         leading: Checkbox(

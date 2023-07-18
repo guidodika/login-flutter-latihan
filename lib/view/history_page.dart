@@ -169,7 +169,7 @@ class _HistoryPageState extends State<HistoryPage> {
                             ),
                           ),
               ),
-              SizedBox(height: 16.0),
+
               Align(
                 alignment: Alignment.bottomRight,
                 child: Padding(

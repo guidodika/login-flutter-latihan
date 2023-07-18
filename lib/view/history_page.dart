@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/view/tambahPasien_page.dart';
@@ -17,6 +16,7 @@ class _HistoryPageState extends State<HistoryPage> {
   List<CardItem> cardItems = [];
   List<CardItem> filteredCardItems = [];
   final FocusNode _searchFocusNode = FocusNode();
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -29,7 +29,7 @@ class _HistoryPageState extends State<HistoryPage> {
     if (query.isNotEmpty) {
       filteredList = cardItems
           .where((cardItem) =>
-          cardItem.name.toLowerCase().contains(query.toLowerCase()))
+              cardItem.name.toLowerCase().contains(query.toLowerCase()))
           .toList();
     } else {
       filteredList = cardItems;
@@ -68,15 +68,17 @@ class _HistoryPageState extends State<HistoryPage> {
       filteredCardItems = searchQuery.isEmpty
           ? cardItems
           : cardItems
-          .where((cardItem) =>
-          cardItem.name.toLowerCase().contains(searchQuery.toLowerCase()))
-          .toList();
+              .where((cardItem) => cardItem.name
+                  .toLowerCase()
+                  .contains(searchQuery.toLowerCase()))
+              .toList();
     });
   }
 
   Future<void> _saveData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<Map<String, dynamic>> items = cardItems.map((item) => item.toJson()).toList();
+    List<Map<String, dynamic>> items =
+        cardItems.map((item) => item.toJson()).toList();
     await prefs.setStringList(
       'cardItems',
       items.map((item) => json.encode(item)).toList(),
@@ -84,6 +86,10 @@ class _HistoryPageState extends State<HistoryPage> {
   }
 
   Future<void> _loadData() async {
+    setState(() {
+      isLoading = true;
+    });
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String>? itemStrings = prefs.getStringList('cardItems');
     if (itemStrings != null) {
@@ -91,10 +97,14 @@ class _HistoryPageState extends State<HistoryPage> {
       setState(() {
         cardItems = items.map((item) => CardItem.fromJson(item)).toList();
         updateFilteredCardItems();
+        isLoading = false;
+      });
+    } else {
+      setState(() {
+        isLoading = false;
       });
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -132,30 +142,32 @@ class _HistoryPageState extends State<HistoryPage> {
                 ),
               ),
               Expanded(
-                child: filteredCardItems.isEmpty
-                    ? Center(
-                  child: Text(
-                    'Data Pasien Masih Kosong',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16.0,
-                    ),
-                  ),
-                )
-                    : Scrollbar(
-                  thumbVisibility: true,
-                  child: ListView.builder(
-                    itemCount: filteredCardItems.length,
-                    itemBuilder: (context, index) {
-                      return CardItem(
-                        name: filteredCardItems[index].name,
-                        keluhan: filteredCardItems[index].keluhan,
-                        birthdate: filteredCardItems[index].birthdate,
-                        onDelete: () => deleteCardItem(index),
-                      );
-                    },
-                  ),
-                ),
+                child: isLoading
+                    ? Center(child: CircularProgressIndicator())
+                    : filteredCardItems.isEmpty
+                        ? Center(
+                            child: Text(
+                              'Data Pasien Masih Kosong',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16.0,
+                              ),
+                            ),
+                          )
+                        : Scrollbar(
+                            thumbVisibility: true,
+                            child: ListView.builder(
+                              itemCount: filteredCardItems.length,
+                              itemBuilder: (context, index) {
+                                return CardItem(
+                                  name: filteredCardItems[index].name,
+                                  keluhan: filteredCardItems[index].keluhan,
+                                  birthdate: filteredCardItems[index].birthdate,
+                                  onDelete: () => deleteCardItem(index),
+                                );
+                              },
+                            ),
+                          ),
               ),
               SizedBox(height: 16.0),
               Align(
@@ -164,16 +176,13 @@ class _HistoryPageState extends State<HistoryPage> {
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton.icon(
                     onPressed: () async {
-                      final result = await Navigator.push(
+                      await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
                               TambahPasienPage(onSave: addCardItem),
                         ),
                       );
-                      if (result != null) {
-                        // Handle result if needed
-                      }
                     },
                     icon: Icon(Icons.add),
                     label: Text('Tambah Pasien'),

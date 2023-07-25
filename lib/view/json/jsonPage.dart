@@ -101,7 +101,7 @@ class _JsonPageState extends State<JsonPage> {
                       child: ListView.builder(
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
-                        itemCount: data!.length,
+                        itemCount: dataList.length,
                         itemBuilder: (context, index) {
                           Map<String, String> dataMap = dataList[index];
                           return Card(

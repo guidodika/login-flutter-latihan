@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../model/data.dart';
 import '../../utils/data_provider.dart';
-import 'data_widget.dart';
 import '../../utils/data_util.dart'; // Import file data_util.dart
 
 class JsonPage extends StatefulWidget {

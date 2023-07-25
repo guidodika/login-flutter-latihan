@@ -112,7 +112,7 @@ class _JsonPageState extends State<JsonPage> {
                                 physics: NeverScrollableScrollPhysics(),
                                 itemCount: data!.length,
                                 itemBuilder: (context, index) {
-                                  String key = dataMap.keys.toList()[index];
+                                  String key = data[index].name;
                                   String value = dataMap.values.toList()[index];
                                   return Text('$key: $value');
                                 },

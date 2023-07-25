@@ -38,24 +38,26 @@ class _SplashScreenState extends State<SplashScreen> {
             _splashScreenBloc.add(CekStatusLogin());
             checkStatus = false;
           }
-          return Container(
-            margin: const EdgeInsets.all(30),
-            height: double.maxFinite,
-            decoration: const BoxDecoration(
-              // image: DecorationImage(
-              //   image: new AssetImage(
-              //     "assets/images/background.png",
-              //   ),
-              //   fit: BoxFit.fill,
-              //   colorFilter: new ColorFilter.mode(
-              //       Colors.white.withOpacity(0.9), BlendMode.lighten),
-              // ),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset('assets/images/logo_splash.png'),
-              ],
+          return Center(
+            child: Container(
+              margin: const EdgeInsets.all(30),
+              height: double.maxFinite,
+              decoration: const BoxDecoration(
+                // image: DecorationImage(
+                //   image: new AssetImage(
+                //     "assets/images/background.png",
+                //   ),
+                //   fit: BoxFit.fill,
+                //   colorFilter: new ColorFilter.mode(
+                //       Colors.white.withOpacity(0.9), BlendMode.lighten),
+                // ),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset('assets/images/logo_splash.png'),
+                ],
+              ),
             ),
           );
         },

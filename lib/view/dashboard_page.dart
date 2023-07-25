@@ -3,8 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:untitled/view/home_page.dart';
 import 'package:untitled/view/history_page.dart';
 import 'package:untitled/view/profile_page.dart';
-
-import 'jsonPage.dart';
+import 'json/jsonPage.dart';
 
 class DashboardPage extends StatefulWidget {
   @override

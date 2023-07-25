@@ -113,7 +113,7 @@ class _JsonPageState extends State<JsonPage> {
                                 itemCount: data!.length,
                                 itemBuilder: (context, index) {
                                   String key = data[index].name;
-                                  String value = dataMap.values.toList()[index];
+                                  String value = dataMap[data[index].name] ?? '';
                                   return Text('$key: $value');
                                 },
                               ),
